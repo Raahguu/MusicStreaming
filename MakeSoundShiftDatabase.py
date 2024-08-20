@@ -7,7 +7,7 @@ cursor.execute('''
 CREATE TABLE Album (
     AlbumID INTEGER PRIMARY KEY UNIQUE NOT NULL UNIQUE,
     Name TEXT NOT NULL,
-    ReleaseDate DATE,
+    ReleaseDate TEXT,
     CONSTRAINT Name CHECK (LENGTH(Name) <= 50)
 )''')
 
@@ -17,7 +17,7 @@ CREATE TABLE Song (
     Name TEXT NOT NULL,
     Length INT,
     AlbumID INTEGER,
-    ReleaseDate DATE,
+    ReleaseDate TEXT,
     FOREIGN KEY (AlbumID) REFERENCES Album(AlbumID),
     CONSTRAINT Length CHECK (Length > 0),
     CONSTRAINT Name CHECK (LENGTH(Name) <= 50)
@@ -29,7 +29,7 @@ CREATE TABLE BankDetails (
     BankDetailsID INTEGER PRIMARY KEY UNIQUE NOT NULL UNIQUE,
     CardNumber INTEGER NOT NULL CHECK (LENGTH(CardNumber) <= 19), 
     CardHolderName TEXT NOT NULL CHECK (LENGTH(CardHolderName) <= 50), 
-    ExpirationDate DATE NOT NULL CHECK (ExpirationDate > DATE('now')), 
+    ExpirationDate TEXT NOT NULL, 
     CVV INTEGER NOT NULL CHECK (LENGTH(CVV) <= 4)
 )
 ''')
@@ -49,7 +49,7 @@ CREATE TABLE RecentlyPlayedSongs (
     BridgeID INTEGER PRIMARY KEY UNIQUE NOT NULL,
     SongID INTEGER,
     CustomerID INTEGER,
-    DateListenedTo DATE,
+    DateListenedTo TEXT,
     FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
     FOREIGN KEY (SongID) REFERENCES Song(SongID)
 )''')
@@ -82,7 +82,7 @@ CREATE TABLE SubscriptionInvoice (
     InvoiceID INTEGER PRIMARY KEY UNIQUE NOT NULL,
     BankDetailsID INTEGER,
     CustomerID INTEGER,
-    SaleDate DATE NOT NULL,
+    SaleDate TEXT NOT NULL,
     AmountCharged NUMBER NOT NULL CHECK (AmountCharged > 0 AND ROUND(AmountCharged, 2) = AmountCharged),
     SubscriptionLengthBought INTEGER NOT NULL CHECK (SubscriptionLengthBought > 0),
     CONSTRAINT CustomerID FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
