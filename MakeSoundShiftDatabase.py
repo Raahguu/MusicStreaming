@@ -3,6 +3,19 @@ import sqlite3
 conn = sqlite3.connect("SoundShift.db")
 cursor = conn.cursor()
 
+cursor.executescript('''
+    DROP TABLE SongArtistBridge;
+    DROP TABLE SongGenreBridge;
+    DROP TABLE RecentlyPlayedSongs;
+    DROP TABLE SubscriptionInvoice;
+    DROP TABLE Song;
+    DROP TABLE Album;
+    DROP TABLE Customer;
+    DROP TABLE BankDetails;
+    DROP TABLE Artist;
+    DROP TABLE Genre;
+''')
+
 cursor.execute('''
 CREATE TABLE Album (
     AlbumID INTEGER PRIMARY KEY UNIQUE NOT NULL UNIQUE,
@@ -83,7 +96,6 @@ CREATE TABLE SubscriptionInvoice (
     BankDetailsID INTEGER,
     CustomerID INTEGER,
     SaleDate TEXT NOT NULL,
-    AmountCharged NUMBER NOT NULL CHECK (AmountCharged > 0 AND ROUND(AmountCharged, 2) = AmountCharged),
     SubscriptionLengthBought INTEGER NOT NULL CHECK (SubscriptionLengthBought > 0),
     CONSTRAINT CustomerID FOREIGN KEY (CustomerID) REFERENCES Customer(CustomerID),
     CONSTRAINT BankDetailsID FOREIGN KEY (BankDetailsID) REFERENCES BankDetails(BankDetailsID)
@@ -101,3 +113,7 @@ CREATE TABLE SongGenreBridge (
 conn.commit()
 cursor.close()
 conn.close()
+
+import PopulateSoundShiftDatabaseWithData as populate
+
+populate.main()
