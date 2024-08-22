@@ -4,16 +4,16 @@ conn = sqlite3.connect("SoundShift.db")
 cursor = conn.cursor()
 
 cursor.executescript('''
-    DROP TABLE SongArtistBridge;
-    DROP TABLE SongGenreBridge;
-    DROP TABLE RecentlyPlayedSongs;
-    DROP TABLE SubscriptionInvoice;
-    DROP TABLE Song;
-    DROP TABLE Album;
-    DROP TABLE Customer;
-    DROP TABLE BankDetails;
-    DROP TABLE Artist;
-    DROP TABLE Genre;
+    DROP TABLE IF EXISTS SongArtistBridge;
+    DROP TABLE IF EXISTS SongGenreBridge;
+    DROP TABLE IF EXISTS RecentlyPlayedSongs;
+    DROP TABLE IF EXISTS SubscriptionInvoice;
+    DROP TABLE IF EXISTS Song;
+    DROP TABLE IF EXISTS Album;
+    DROP TABLE IF EXISTS Customer;
+    DROP TABLE IF EXISTS BankDetails;
+    DROP TABLE IF EXISTS Artist;
+    DROP TABLE IF EXISTS Genre;
 ''')
 
 cursor.execute('''
