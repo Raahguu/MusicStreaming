@@ -40,7 +40,7 @@ CREATE TABLE Song (
 cursor.execute('''
 CREATE TABLE BankDetails (
     BankDetailsID INTEGER PRIMARY KEY UNIQUE NOT NULL UNIQUE,
-    CardNumber INTEGER NOT NULL CHECK (LENGTH(CardNumber) <= 19), 
+    CardNumber INTEGER NOT NULL CHECK (LENGTH(CardNumber) <= 19 AND LENGTH(CardNumber) >= 8), 
     CardHolderName TEXT NOT NULL CHECK (LENGTH(CardHolderName) <= 50), 
     ExpirationDate TEXT NOT NULL, 
     CVV INTEGER NOT NULL CHECK (LENGTH(CVV) <= 4)
@@ -50,10 +50,11 @@ CREATE TABLE BankDetails (
 cursor.execute('''
 CREATE TABLE Customer (
     CustomerID INTEGER PRIMARY KEY UNIQUE NOT NULL,
-    Username TEXT NOT NULL CHECK (LENGTH(UserName) <= 20),
+    Username TEXT NOT NULL UNIQUE CHECK (LENGTH(UserName) <= 20),
     BankDetailsID INTEGER,
     Email Text NOT NULL CHECK (Email LIKE '%@%'),
     Password TEXT NOT NULL CHECK (LENGTH(Password) = 64),
+    SignedUp INTEGER NOT NULL CHECK (SignedUp >= 0 AND SignedUp <= 1),
     CONSTRAINT BankDetailsID FOREIGN KEY (BankDetailsID) REFERENCES BankDetails(BankDetailsID)
 )''')
 

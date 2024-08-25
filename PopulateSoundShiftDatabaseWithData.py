@@ -117,11 +117,11 @@ def main():
     INSERT INTO BankDetails (CardNumber, CardHolderName, ExpirationDate, CVV) VALUES (5678901234567890, 'Charlie Green', '2027-08-31', 202);
 
     -- Insert Customers
-    INSERT INTO Customer (Username, BankDetailsID, Email, Password) VALUES ('johndoe', 1, 'johndoe@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8');
-    INSERT INTO Customer (Username, BankDetailsID, Email, Password) VALUES ('janesmith', 2, 'janesmith@hotmail.com', '0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e');
-    INSERT INTO Customer (Username, BankDetailsID, Email, Password) VALUES ('alicejohnson', 3, 'alicejohnson@icloud.com', 'b3d17ebbe4f2b75d27b6309cfaae1487b667301a73951e7d523a039cd2dfe110');
-    INSERT INTO Customer (Username, BankDetailsID, Email, Password) VALUES ('bobbrown', 4, 'bobbrown@gmail.com', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f');
-    INSERT INTO Customer (Username, BankDetailsID, Email, Password) VALUES ('charliegreen', 5, 'charliegreen@outlook.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918');
+    INSERT INTO Customer (Username, BankDetailsID, Email, Password, SignedUp) VALUES ('johndoe', 1, 'johndoe@gmail.com', '5e884898da28047151d0e56f8dc6292773603d0d6aabbdd62a11ef721d1542d8', 1);
+    INSERT INTO Customer (Username, BankDetailsID, Email, Password, SignedUp) VALUES ('janesmith', 2, 'janesmith@hotmail.com', '0b14d501a594442a01c6859541bcb3e8164d183d32937b851835442f69d5c94e', 1);
+    INSERT INTO Customer (Username, BankDetailsID, Email, Password, SignedUp) VALUES ('alicejohnson', 3, 'alicejohnson@icloud.com', 'b3d17ebbe4f2b75d27b6309cfaae1487b667301a73951e7d523a039cd2dfe110', 1);
+    INSERT INTO Customer (Username, BankDetailsID, Email, Password, SignedUp) VALUES ('bobbrown', 4, 'bobbrown@gmail.com', 'ef92b778bafe771e89245b89ecbc08a44a4e166c06659911881f383d4473e94f', 1);
+    INSERT INTO Customer (Username, BankDetailsID, Email, Password, SignedUp) VALUES ('charliegreen', 5, 'charliegreen@outlook.com', '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918', 1);
 
     -- Insert Artists
     INSERT INTO Artist (ArtistID, StageName, FirstName, LastName) VALUES (1, 'Echo Smith', 'John', 'Doe');
@@ -147,11 +147,15 @@ def main():
 
 
     -- Insert Genres
-    INSERT INTO Genre (GenreID, Name) VALUES (1, 'Ambient');
+    INSERT INTO Genre (GenreID, Name) VALUES (1, 'Electronic');
     INSERT INTO Genre (GenreID, Name) VALUES (2, 'Classical');
     INSERT INTO Genre (GenreID, Name) VALUES (3, 'Jazz');
-    INSERT INTO Genre (GenreID, Name) VALUES (4, 'Electronic');
+    INSERT INTO Genre (GenreID, Name) VALUES (4, 'Country');
     INSERT INTO Genre (GenreID, Name) VALUES (5, 'Rock');
+    INSERT INTO Genre (GenreID, Name) VALUES (6, 'Blues');
+    INSERT INTO Genre (GenreID, Name) VALUES (7, 'Hip-Hop');
+    INSERT INTO Genre (GenreID, Name) VALUES (8, 'Pop');
+
 
     -- Insert SongArtistBridge
     INSERT INTO SongArtistBridge (ArtistID, SongID) VALUES (1, 1);
@@ -297,26 +301,66 @@ def main():
     INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (48, 5, 48);
     INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (49, 5, 49);
     INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (50, 5, 50);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (101, 2, 1);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (102, 3, 2);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (103, 4, 3);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (104, 5, 4);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (105, 1, 5);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (106, 2, 6);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (107, 3, 7);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (108, 4, 8);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (109, 5, 9);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (110, 1, 10);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (111, 3, 11);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (112, 4, 12);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (113, 5, 13);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (114, 1, 14);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (115, 2, 15);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (116, 3, 16);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (117, 4, 17);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (118, 5, 18);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (119, 1, 19);
-    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (120, 2, 20);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (51, 6, 51);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (52, 6, 52);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (53, 6, 53);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (54, 6, 54);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (55, 6, 55);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (56, 6, 56);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (57, 6, 57);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (58, 6, 58);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (59, 6, 59);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (60, 6, 60);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (61, 7, 61);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (62, 7, 62);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (63, 7, 63);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (64, 7, 64);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (65, 7, 65);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (66, 7, 66);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (67, 7, 67);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (68, 7, 68);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (69, 7, 69);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (70, 7, 70);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (71, 8, 71);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (72, 8, 72);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (73, 8, 73);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (74, 8, 74);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (75, 8, 75);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (76, 8, 76);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (77, 8, 77);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (78, 8, 78);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (79, 8, 79);
+    INSERT INTO SongGenreBridge (BridgeID, GenreID, SongID) VALUES (80, 8, 80);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (2, 1);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (8, 2);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (4, 3);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (5, 4);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (1, 5);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (2, 6);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (3, 7);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (4, 8);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (5, 9);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (1, 10);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (7, 11);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (4, 12);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (5, 13);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (1, 14);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (2, 15);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (3, 16);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (4, 17);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (6, 18);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (1, 19);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (2, 20);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (1, 51);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (2, 52);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (3, 53);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (4, 54);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (5, 55);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (6, 56);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (7, 57);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (8, 58);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (1, 59);
+    INSERT INTO SongGenreBridge (GenreID, SongID) VALUES (2, 60);
 
     -- Insert RecentlyPlayedSongs
     INSERT INTO RecentlyPlayedSongs (SongID, CustomerID, DateListenedTo) VALUES (abs(random()) % 79 +1, abs(random()) % 4 + 1, date(strftime('%s', '2023-01-01 00:00:00') +abs(random() % (strftime('%s', '2024-08-20 00:00:00') - strftime('%s', '2023-01-01 00:00:00'))),'unixepoch'));
