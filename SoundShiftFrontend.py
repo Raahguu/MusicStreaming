@@ -4,8 +4,8 @@ import os
 from hashlib import sha256
 import sys
 import pandas as pd
+import datetime
 import time
-
 
 global conn
 global cursor
@@ -33,6 +33,23 @@ def closeProgram():
     cursor.close()
     conn.close()
     sys.exit()
+
+def AscendingOrDescending(title: str):
+    while True:
+        Title(title)
+        print("How would you like to sort it: ")
+        print("(A)scending ")
+        print("(D)escending")
+        inp = input().lower()
+        match inp:
+            case "a": 
+                return "ASC"
+            case "d": 
+                return"DESC"
+            case _:
+                print("I'm sorry, I didn't recognise that command, please try again")
+                print("Press any key to try again")
+                os.system("pause > nul")
 
 def LogIn():
     while True:
@@ -88,12 +105,11 @@ def DisplayQueries(query : str):
     print(df)
     
     #wait until  the say okay
-    print("\n\033[1mPress \'Enter\' to continue onto browsing other categories\033[0m")
+    print("\n\033[1mPress \'Enter\' to close the table\033[0m")
     input()
     
 def BrowseSongs():
     sortTerm = ""
-    AscOrDesc = ""
     #get how the user wants their songs sorted
     while True:
         Title("Songs")
@@ -133,23 +149,7 @@ def BrowseSongs():
                 os.system("pause > nul")
     
     #Sorted Ascending or Descending
-    while True:
-        Title("Songs")
-        print("How would you like to sort it: ")
-        print("(A)scending ")
-        print("(D)escending")
-        inp = input().lower()
-        match inp:
-            case "a": 
-                AscOrDesc = "ASC"
-                break
-            case "d": 
-                AscOrDesc = "DESC"
-                break
-            case _:
-                print("I'm sorry, I didn't recognise that command, please try again")
-                print("Press any key to try again")
-                os.system("pause > nul")
+    AscOrDesc = AscendingOrDescending("Songs")
     
     Title("Songs")
     query = '''
@@ -171,7 +171,6 @@ def BrowseSongs():
 
 def BrowseArtists():
     sortTerm = ""
-    AscOrDesc = ""
     #get how the user wants their artists sorted
     while True:
         Title("Artists")
@@ -206,23 +205,7 @@ def BrowseArtists():
                 os.system("pause > nul")
     
     #Sorted Ascending or Descending
-    while True:
-        Title("Artists")
-        print("How would you like to sort it: ")
-        print("(A)scending ")
-        print("(D)escending")
-        inp = input().lower()
-        match inp:
-            case "a": 
-                AscOrDesc = "ASC"
-                break
-            case "d": 
-                AscOrDesc = "DESC"
-                break
-            case _:
-                print("I'm sorry, I didn't recognise that command, please try again")
-                print("Press any key to try again")
-                os.system("pause > nul")
+    AscOrDesc = AscendingOrDescending("Artists")
     
     Title("Artists")
     query = '''
@@ -245,7 +228,6 @@ def BrowseArtists():
 
 def BrowseAlbums():
     sortTerm = ""
-    AscOrDesc = ""
     #get how the user wants their Albums sorted
     while True:
         Title("LPs/Albums")
@@ -280,23 +262,8 @@ def BrowseAlbums():
                 os.system("pause > nul")
     
     #Sorted Ascending or Descending
-    while True:
-        Title("LPs/Albums")
-        print("How would you like to sort it: ")
-        print("(A)scending ")
-        print("(D)escending")
-        inp = input().lower()
-        match inp:
-            case "a": 
-                AscOrDesc = "ASC"
-                break
-            case "d": 
-                AscOrDesc = "DESC"
-                break
-            case _:
-                print("I'm sorry, I didn't recognise that command, please try again")
-                print("Press any key to try again")
-                os.system("pause > nul")
+    AscOrDesc = AscendingOrDescending("LPs/Albums")
+        
     
     Title("LPs/Albums")
     query = '''
@@ -318,7 +285,6 @@ def BrowseAlbums():
 
 def BrowseGenres():
     sortTerm = ""
-    AscOrDesc = ""
     #get how the user wants their Albums sorted
     while True:
         Title("Genres")
@@ -353,23 +319,7 @@ def BrowseGenres():
                 os.system("pause > nul")
     
     #Sorted Ascending or Descending
-    while True:
-        Title("Genres")
-        print("How would you like to sort it: ")
-        print("(A)scending ")
-        print("(D)escending")
-        inp = input().lower()
-        match inp:
-            case "a": 
-                AscOrDesc = "ASC"
-                break
-            case "d": 
-                AscOrDesc = "DESC"
-                break
-            case _:
-                print("I'm sorry, I didn't recognise that command, please try again")
-                print("Press any key to try again")
-                os.system("pause > nul")
+    AscOrDesc = AscendingOrDescending("Genres")
     
     Title("Genres")
     query = '''
@@ -422,19 +372,20 @@ def UserData(customer : Customer):
             print("What would you like to do: ")
             print("(E)dit data")
             print("(D)elete Account")
-            print("(B)ack to Account Settings")
+            print("(B)ack to Account Data")
             inp = input().lower()
             match inp:
                 case "e": break
                 case "d":
                     print("Please input the words 'Delete Account' to delete your account")
-                    inp = input().lower()
-                    if(inp != 'delete account'): continue
+                    inp = input()
+                    if(inp != 'Delete Account'): continue
                     #just set the password to a value no one knows the hash of, so no one can ever sign in as them, so no delete anomolies occur
                     cursor.execute('''UPDATE Customer SET Password = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" WHERE CustomerID = ?''', [customer.CustomerID])
                     customer = Customer
                     print("Account Deleted")
                     print("Press any key to close the progam")
+                    os.system("pause > nul")
                     closeProgram()
                 case "b": return
                 case _:
@@ -540,7 +491,7 @@ def BankingData(customer : Customer):
             print("What would you like to do: ")
             print("(N)ew Bank Account")
             print("(D)elete Data")
-            print("(B)ack to Account Settings")
+            print("(B)ack to Account Data")
             inp = input().lower()
             match inp:
                 case "d":
@@ -560,7 +511,7 @@ def BankingData(customer : Customer):
             while True:
                 inp = input("Do you want to link a new bank account (Y/N): ").lower()
                 if (inp == "n"):
-                    print("Click a key to go back to Account Settings")
+                    print("Click a key to go back to Account Data")
                     os.system("pause > nul")
                     return
                 elif(inp != "y"):
@@ -573,7 +524,7 @@ def BankingData(customer : Customer):
     bankingDetails = []
     while True:
         Title("Banking Data")
-        print("New Bank Card\n")
+        print("New Bank Card")
         inp = input("Card Number: ")
         if (len(inp) < 8 or len(inp) > 19): 
             print("Card number must be between 8-19 digits")
@@ -591,7 +542,7 @@ def BankingData(customer : Customer):
     
     while True:
         Title("Banking Data")
-        print("New Bank Card\n")
+        print("New Bank Card")
         inp = input("Card Holder Name: ")
         if (len(inp) > 50): 
             print("The card holder name must be less than 50 characters")
@@ -603,7 +554,7 @@ def BankingData(customer : Customer):
     
     while True:
         Title("Banking Data")
-        print("New Bank Card\n")
+        print("New Bank Card")
         try:
             month = int(input("Card Expiration Date Month (as a number): "))
         except:
@@ -623,17 +574,19 @@ def BankingData(customer : Customer):
             print("Press any key to try again")
             os.system("pause > nul")
             continue
-        if (time.strftime("%d/%m/%Y", (1, month, year)) < time.mktime(time.localtime())): 
+        date = "01/" + str(month) + "/" + str(year)      
+        #check the date has not already passed, or it is not before 1970, as unix timestamps before 1970 cannot be found, also cannot be over 3000, as that throws another error
+        if ((year <= 1970) or (year >= 3000) or (time.mktime(datetime.datetime.strptime(date,"%d/%m/%Y").timetuple()) < datetime.datetime.timestamp(datetime.datetime.now()))): 
             print("This date has already passed")
             print("Press any key to try again")
             os.system("pause > nul")
             continue
-        bankingDetails.append("01/" + str(month) + "/" + str(year))
+        bankingDetails.append(date)
         break
     
     while True:
         Title("Banking Data")
-        print("New Bank Card\n")
+        print("New Bank Card")
         try:
             inp = int(input("CVV: "))
         except:
@@ -651,20 +604,32 @@ def BankingData(customer : Customer):
 
     #add new record
     cursor.execute('''INSERT INTO BankDetails (CardNumber, CardHolderName, ExpirationDate, CVV)
-                        VALUES (?, ?, ?, ?, ?)''', [bankingDetails])
+                        VALUES (?, ?, ?, ?)''', bankingDetails)
     #get ID of said record
     cursor.execute("SELECT COUNT(BankDetailsID) FROM BankDetails")
-    id = cursor.fetchall()[0][0] - 1
+    id = cursor.fetchall()[0][0]
     #connect user to new record
     cursor.execute("UPDATE Customer SET BankDetailsID = ? WHERE CustomerID = ?", [id, customer.CustomerID])
     conn.commit()
     return
-    
 
-def AccountSettings():
+def Invoices(customer : Customer):
+    Title("Invoices")
+    query = '''
+        SELECT BankDetails.CardNumber AS "Card Number", 
+        Customer.Email AS "Email", SubscriptionInvoice.SaleDate AS "Purchase Date", 
+        SubscriptionInvoice.SubscriptionLengthBought AS "Months of Subscription Bought",
+        printf("$%.2f", SubscriptionInvoice.SubscriptionLengthBought * 4) AS "Price" FROM SubscriptionInvoice
+        LEFT JOIN BankDetails ON SubscriptionInvoice.BankDetailsID = BankDetails.BankDetailsID
+        LEFT JOIN Customer ON SubscriptionInvoice.CustomerID = Customer.CustomerID
+        WHERE SubscriptionInvoice.CustomerID = ''' + str(customer.CustomerID) + '''
+        ORDER BY SubscriptionInvoice.SaleDate DESC'''
+    DisplayQueries(query)
+
+def AccountData():
     while True:
-        Title("Account Settings")
-        print("Which account settings do you want to look at: ")
+        Title("Account Data")
+        print("Which account data do you want to look at: ")
         print("(U)ser Data")
         print("(B)anking Data")
         print("(I)nvoices")
@@ -673,7 +638,7 @@ def AccountSettings():
         match inp:
             case "u": UserData(customer)
             case "b": BankingData(customer)
-            case "i": pass
+            case "i": Invoices(customer)
             case "r": return
             case _:
                     print("I'm sorry, I didn't recognise that command, please try again")
@@ -691,14 +656,14 @@ def main():
         print("You are signed in as", customer.Username)
         print("What do you want to do: ")
         print("(B)rowse")
-        print("(A)ccount Settings")
+        print("(A)ccount Data")
         print("(L)og Out")
         print("(Q)uit")
         inp = input().lower()
         match inp:
             case "b": Browse()
-            case "a": AccountSettings()
-            case "l": CustomerID = -1
+            case "a": AccountData()
+            case "l": customer.CustomerID = -1
             case "q": closeProgram()
             case _: 
                 print("I'm sorry, I didn't recognise that command, please try again")
