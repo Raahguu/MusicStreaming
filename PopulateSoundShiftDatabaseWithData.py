@@ -148,7 +148,7 @@ def main():
 
     -- Insert Genres
     INSERT INTO Genre (GenreID, Name) VALUES (1, 'Electronic');
-    INSERT INTO Genre (GenreID, Name) VALUES (2, 'Classical');
+    INSERT INTO Genre (GenreID, Name) VALUES (2, 'Metal');
     INSERT INTO Genre (GenreID, Name) VALUES (3, 'Jazz');
     INSERT INTO Genre (GenreID, Name) VALUES (4, 'Country');
     INSERT INTO Genre (GenreID, Name) VALUES (5, 'Rock');
@@ -247,7 +247,6 @@ def main():
     INSERT INTO SongArtistBridge (ArtistID, SongID) VALUES (9, 74);
     INSERT INTO SongArtistBridge (ArtistID, SongID) VALUES (10, 63);
     INSERT INTO SongArtistBridge (ArtistID, SongID) VALUES (11, 11);
-    INSERT INTO SongArtistBridge (ArtistID, SongID) VALUES (12, 72);
 
 
     -- Insert SongGenreBridge

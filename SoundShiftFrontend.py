@@ -209,11 +209,11 @@ def BrowseArtists():
     
     Title("Artists")
     query = '''
-                SELECT Artist.StageName AS Artist, COUNT(DISTINCT Album.AlbumID) AS "Number of Albums", 
-				COUNT(DISTINCT Song.SongID) AS "Number of Songs",
-				GROUP_CONCAT(DISTINCT Genre.Name) AS "Worked on Genres",
+                SELECT Artist.StageName AS Artist, COUNT(DISTINCT Album.AlbumID) AS "Total Albums", 
+				COUNT(DISTINCT Song.SongID) AS "Total Songs",
+				GROUP_CONCAT(DISTINCT Genre.Name) AS "Genres Worked on",
                 strftime('%M:%S', time(SUM(Song.Length), 'unixepoch')) AS "Total Song Length",
-                MAX(RecentlyPlayedSongs.DateListenedTo) AS "Last Time Listened To" FROM Song
+                MAX(RecentlyPlayedSongs.DateListenedTo) AS "Last Listened To" FROM Song
                 INNER JOIN Album ON Album.AlbumID = Song.AlbumID
                 INNER JOIN SongArtistBridge ON SongArtistBridge.SongID = Song.SongID
                 INNER JOIN Artist ON Artist.ArtistID = SongArtistBridge.ArtistID
