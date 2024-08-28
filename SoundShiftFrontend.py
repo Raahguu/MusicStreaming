@@ -40,7 +40,7 @@ def AscendingOrDescending(title: str):
         print("How would you like to sort it: ")
         print("(A)scending ")
         print("(D)escending")
-        inp = input().lower()
+        inp = input().lower().strip()
         match inp:
             case "a": 
                 return "ASC"
@@ -122,7 +122,7 @@ def BrowseSongs():
         print("(W)hen you last listened to it")
         print("(H)ow long the song is")
         print("(B)ack to genral browsing")
-        inp = input().lower()
+        inp = input().lower().strip()
         match inp: # if the letter is one of the recognised few, then just move on, otherwise, continue asking how to sort it
             case "a": 
                 sortTerm = "Artist.StageName"
@@ -181,7 +181,7 @@ def BrowseArtists():
         print("(W)hen you last listened to them")
         print("(H)ow long their total song time is")
         print("(B)ack to genral browsing")
-        inp = input().lower()
+        inp = input().lower().strip()
         match inp: # if the letter is one of the recognised few, then just move on, otherwise, continue asking how to sort it
             case "n": 
                 sortTerm = "Artist.StageName"
@@ -238,7 +238,7 @@ def BrowseAlbums():
         print("(W)hen you last listened to them")
         print("(G)enres")
         print("(B)ack to genral browsing")
-        inp = input().lower()
+        inp = input().lower().strip()
         match inp: # if the letter is one of the recognised few, then just move on, otherwise, continue asking how to sort it
             case "n": 
                 sortTerm = "Album.Name"
@@ -295,7 +295,7 @@ def BrowseGenres():
         print("(W)hen you last listened to them")
         print("(L)P/Album count")
         print("(B)ack to genral browsing")
-        inp = input().lower()
+        inp = input().lower().strip()
         match inp: # if the letter is one of the recognised few, then just move on, otherwise, continue asking how to sort it
             case "n": 
                 sortTerm = "Genre.Name"
@@ -348,7 +348,7 @@ def Browse():
         print("(G)enres")
         print("(L)Ps/Albums")
         print("(B)ack to main menu")
-        inp = input().lower()
+        inp = input().lower().strip()
         match inp:
             case "s": BrowseSongs()
             case "a": BrowseArtists()
@@ -373,7 +373,7 @@ def UserData(customer : Customer):
             print("(E)dit data")
             print("(D)elete Account")
             print("(B)ack to Account Data")
-            inp = input().lower()
+            inp = input().lower().strip()
             match inp:
                 case "e": break
                 case "d":
@@ -382,6 +382,8 @@ def UserData(customer : Customer):
                     if(inp != 'Delete Account'): continue
                     #just set the password to a value no one knows the hash of, so no one can ever sign in as them, so no delete anomolies occur
                     cursor.execute('''UPDATE Customer SET Password = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" WHERE CustomerID = ?''', [customer.CustomerID])
+                    cursor.execute('''UPDATE Customer SET SignedUp = 0 WHERE CustomerID = ?''', [customer.CustomerID])
+                    
                     customer = Customer
                     print("Account Deleted")
                     print("Press any key to close the progam")
@@ -401,10 +403,20 @@ def UserData(customer : Customer):
             newUsername += customer.Username[len(newUsername):]
             newUsername = newUsername.strip()
             try:
+                if('\"' in newUsername or "\'" in newUsername or " " in newUsername):
+                    print("Usernames cannot contain a \", \', or a space ")
+                    print("Press any key to try again")
+                    os.system("pause > null")
+                    continue
+                if("" == newUsername):
+                    print("Username cannot be null")
+                    print("Press any key to try again")
+                    os.system("pause > null")
+                    continue
                 cursor.execute("UPDATE Customer SET Username = ? WHERE CustomerID = ?", [newUsername, customer.CustomerID])
                 break
             except:
-                print("Someone already has that username")
+                print("That username has already been taken")
                 print("Press any key to try again")
                 os.system("pause > null")
             
@@ -417,10 +429,17 @@ def UserData(customer : Customer):
             newEmail += customer.Email[len(newEmail):]
             newEmail = newEmail.strip()
             try:
+                if ('@' not in newEmail or '\"' in newEmail or "\'" in newEmail or " " in newEmail): raise TypeError
+                if("@" == newEmail):
+                    print("Emails cannot be null")
+                    print("Press any key to try again")
+                    os.system("pause > null")
+                    continue
                 cursor.execute("UPDATE Customer SET Email = ? WHERE CustomerID = ?", [newEmail, customer.CustomerID])
                 break
             except:
                 print("An email needs a '@' to be accepted")
+                print("An email also cannot contain any spaces, \', or \"")
                 print("Press any key to try again")
                 os.system("pause > null")
 
@@ -430,7 +449,7 @@ def UserData(customer : Customer):
             print("Edit\n")
             print("Do you want to continue your subscription to SoundShift")
             print("(Saying No, will stop an autorenewal of your subscription): ")
-            inp = input("(Y)es or (N)o: ").lower()
+            inp = input("(Y)es or (N)o: ").lower().strip()
             if (inp == "y"):
                 cursor.execute("UPDATE Customer SET SignedUp = ? WHERE CustomerID = ?", [True, customer.CustomerID])
                 break 
@@ -444,7 +463,7 @@ def UserData(customer : Customer):
         
         #change password
         while True:
-            inp = input("Do you want to change your password (Y/N): ").lower()
+            inp = input("Do you want to change your password (Y/N): ").lower().strip()
             if (inp == "n"): break
             if (inp != "y"): 
                 print("I'm sorry, I didn't recognise that command, please try again")
@@ -492,7 +511,7 @@ def BankingData(customer : Customer):
             print("(N)ew Bank Account")
             print("(D)elete Data")
             print("(B)ack to Account Data")
-            inp = input().lower()
+            inp = input().lower().strip()
             match inp:
                 case "d":
                     #just set the foreign key to go to a new BankDetails record, so no delete anomolies occur
@@ -509,7 +528,7 @@ def BankingData(customer : Customer):
         except:
             print("You account isn't linked to a bank account")
             while True:
-                inp = input("Do you want to link a new bank account (Y/N): ").lower()
+                inp = input("Do you want to link a new bank account (Y/N): ").lower().strip()
                 if (inp == "n"):
                     print("Click a key to go back to Account Data")
                     os.system("pause > nul")
@@ -548,6 +567,16 @@ def BankingData(customer : Customer):
             print("The card holder name must be less than 50 characters")
             print("Press any key to try again")
             os.system("pause > nul")
+            continue
+        if('\"' in inp or "\'" in inp or " " in inp):
+                    print("Card Holder Names cannot contain a \", \', or a space ")
+                    print("Press any key to try again")
+                    os.system("pause > null")
+                    continue
+        if ("" == inp):
+            print("Card Holder Names cannot be null")
+            print("Press any key to try again")
+            os.system("pause > null")
             continue
         bankingDetails.append(inp)
         break
@@ -626,6 +655,23 @@ def Invoices(customer : Customer):
         ORDER BY SubscriptionInvoice.SaleDate DESC'''
     DisplayQueries(query)
 
+def DeleteListeningHistory(customer : Customer):
+    Title("Deleting Listening History")
+    query = "DELETE FROM RecentlyPlayedSongs WHERE CustomerID = " + str(customer.CustomerID)
+    try:
+        print("Deleting Data")
+        print("...")
+        cursor.execute(query)
+        conn.commit()
+        print("Data Fully Deleted")
+    except:
+        print("I'm sorry, something went wrong")
+        print("We couldn't delete your data")
+
+    print("Press any key to go back to Account Data")
+    os.system("pause > nul")
+
+
 def AccountData():
     while True:
         Title("Account Data")
@@ -633,12 +679,14 @@ def AccountData():
         print("(U)ser Data")
         print("(B)anking Data")
         print("(I)nvoices")
+        print("(D)elete Listening History")
         print("(R)eturn back to the Main Menu")
-        inp = input().lower()
+        inp = input().lower().strip()
         match inp:
             case "u": UserData(customer)
             case "b": BankingData(customer)
             case "i": Invoices(customer)
+            case "d": DeleteListeningHistory(customer)
             case "r": return
             case _:
                     print("I'm sorry, I didn't recognise that command, please try again")
@@ -659,7 +707,7 @@ def main():
         print("(A)ccount Data")
         print("(L)og Out")
         print("(Q)uit")
-        inp = input().lower()
+        inp = input().lower().strip()
         match inp:
             case "b": Browse()
             case "a": AccountData()

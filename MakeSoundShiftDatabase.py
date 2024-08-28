@@ -43,7 +43,7 @@ CREATE TABLE BankDetails (
     CardNumber INTEGER NOT NULL CHECK (LENGTH(CardNumber) <= 19 AND LENGTH(CardNumber) >= 8), 
     CardHolderName TEXT NOT NULL CHECK (LENGTH(CardHolderName) <= 50), 
     ExpirationDate TEXT NOT NULL, 
-    CVV INTEGER NOT NULL CHECK (LENGTH(CVV) <= 4)
+    CVV INTEGER NOT NULL CHECK (LENGTH(CVV) <= 4 AND LENGTH(CVV) >= 3)
 )
 ''')
 
