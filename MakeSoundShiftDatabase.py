@@ -1,5 +1,7 @@
 import sqlite3
 
+#connects to the existing database, or 
+# if said database does not exist, creates a new one
 conn = sqlite3.connect("SoundShift.db")
 cursor = conn.cursor()
 
@@ -39,7 +41,7 @@ CREATE TABLE Song (
 
 cursor.execute('''
 CREATE TABLE BankDetails (
-    BankDetailsID INTEGER PRIMARY KEY UNIQUE NOT NULL UNIQUE,
+    BankDetailsID INTEGER PRIMARY KEY UNIQUE NOT NULL,
     CardNumber INTEGER NOT NULL CHECK (LENGTH(CardNumber) <= 19 AND LENGTH(CardNumber) >= 8), 
     CardHolderName TEXT NOT NULL CHECK (LENGTH(CardHolderName) <= 50), 
     ExpirationDate TEXT NOT NULL, 

@@ -209,9 +209,10 @@ def BrowseArtists():
     
     Title("Artists")
     query = '''
-                SELECT Artist.StageName AS Artist, COUNT(DISTINCT Album.AlbumID) AS "Total Albums", 
+                SELECT Artist.StageName AS "Stage Name", Artist.FirstName || ' ' || Artist.LastName AS "Actual Name",
+                COUNT(DISTINCT Album.AlbumID) AS "Total Albums", 
 				COUNT(DISTINCT Song.SongID) AS "Total Songs",
-				GROUP_CONCAT(DISTINCT Genre.Name) AS "Genres Worked on",
+				SUM(Genre.Name) AS "Total Genres",
                 strftime('%M:%S', time(SUM(Song.Length), 'unixepoch')) AS "Total Song Length",
                 MAX(RecentlyPlayedSongs.DateListenedTo) AS "Last Listened To" FROM Song
                 INNER JOIN Album ON Album.AlbumID = Song.AlbumID
@@ -380,8 +381,11 @@ def UserData(customer : Customer):
                     print("Please input the words 'Delete Account' to delete your account")
                     inp = input()
                     if(inp != 'Delete Account'): continue
-                    #just set the password to a value no one knows the hash of, so no one can ever sign in as them, so no delete anomolies occur
-                    cursor.execute('''UPDATE Customer SET Password = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" WHERE CustomerID = ?''', [customer.CustomerID])
+                    #just set the password to a value no one knows the hash of, 
+                    # so no one can ever sign in as them, so no delete anomolies occur
+                    cursor.execute('''UPDATE Customer SET Password = 
+                                   "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" 
+                                   WHERE CustomerID = ?''', [customer.CustomerID])
                     cursor.execute('''UPDATE Customer SET SignedUp = 0 WHERE CustomerID = ?''', [customer.CustomerID])
                     
                     customer = Customer
@@ -568,8 +572,8 @@ def BankingData(customer : Customer):
             print("Press any key to try again")
             os.system("pause > nul")
             continue
-        if('\"' in inp or "\'" in inp or " " in inp):
-                    print("Card Holder Names cannot contain a \", \', or a space ")
+        if('\"' in inp or "\'" in inp):
+                    print("Card Holder Names cannot contain a \", or a \'")
                     print("Press any key to try again")
                     os.system("pause > null")
                     continue
