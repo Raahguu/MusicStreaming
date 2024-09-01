@@ -16,6 +16,7 @@ cursor.executescript('''
     DROP TABLE IF EXISTS BankDetails;
     DROP TABLE IF EXISTS Artist;
     DROP TABLE IF EXISTS Genre;
+    DROP TABLE IF EXISTS SubscriptionPrices;
 ''')
 
 cursor.execute('''
@@ -111,6 +112,14 @@ CREATE TABLE SongGenreBridge (
     SongID INTEGER,
     CONSTRAINT SongID FOREIGN KEY (SongID) REFERENCES Song(SongID),
     CONSTRAINT GenreID FOREIGN KEY (GenreID) REFERENCES Genre(GenreID)
+)''')
+
+cursor.execute('''
+CREATE TABLE SubscriptionPrices (
+    PriceID INTEGER PRIMARY KEY UNIQUE NOT NULL,
+    DateSet TEXT NOT NULL,
+    DateEnd TEXT NOT NULL,
+    Price NUMBER NOT NULL CHECK(Price >= 0)
 )''')
 
 conn.commit()

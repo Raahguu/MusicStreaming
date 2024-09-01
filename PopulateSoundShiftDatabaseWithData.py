@@ -15,6 +15,7 @@ def main():
     DELETE FROM BankDetails;
     DELETE FROM Artist;
     DELETE FROM Genre;
+    DELETE FROM SubscriptionPrices;
 
     -- Insert Albums
     INSERT INTO Album (AlbumID, Name, ReleaseDate) VALUES (1, 'Echoes of Eternity', '2021-08-15'),
@@ -448,6 +449,12 @@ def main():
     INSERT INTO SubscriptionInvoice (BankDetailsID, CustomerID, SaleDate, SubscriptionLengthBought) VALUES (5, 5, '2023-08-01', 3);
     INSERT INTO SubscriptionInvoice (BankDetailsID, CustomerID, SaleDate, SubscriptionLengthBought) VALUES (5, 5, '2023-11-01', 3);
     INSERT INTO SubscriptionInvoice (BankDetailsID, CustomerID, SaleDate, SubscriptionLengthBought) VALUES (5, 5, '2024-02-01', 12);
+    
+    -- Insert Subscription Prices
+    INSERT INTO SubscriptionPrices (DateSet, DateEnd, Price) VALUES ('2023-01-01', '2023-05-31', 5);
+    INSERT INTO SubscriptionPrices (DateSet, DateEnd, Price) VALUES ('2023-06-01', '9999-12-31', 8);
+    -- Always have the last one to end at the date '9999-12-31', so then the last one is always applicable, 
+    -- rather then the possibility of their being no price
     ''')
 
     conn.commit()

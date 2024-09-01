@@ -652,7 +652,9 @@ def Invoices(customer : Customer):
         SELECT BankDetails.CardNumber AS "Card Number", 
         Customer.Email AS "Email", SubscriptionInvoice.SaleDate AS "Purchase Date", 
         SubscriptionInvoice.SubscriptionLengthBought AS "Months of Subscription Bought",
-        printf("$%.2f", SubscriptionInvoice.SubscriptionLengthBought * 4) AS "Price" FROM SubscriptionInvoice
+        printf("$%.2f", SubscriptionInvoice.SubscriptionLengthBought * 
+        (SELECT Price FROM SubscriptionPrices WHERE SubscriptionInvoice.SaleDate 
+		BETWEEN SubscriptionPrices.DateSet AND SubscriptionPrices.DateEnd)) AS "Price" FROM SubscriptionInvoice
         LEFT JOIN BankDetails ON SubscriptionInvoice.BankDetailsID = BankDetails.BankDetailsID
         LEFT JOIN Customer ON SubscriptionInvoice.CustomerID = Customer.CustomerID
         WHERE SubscriptionInvoice.CustomerID = ''' + str(customer.CustomerID) + '''
