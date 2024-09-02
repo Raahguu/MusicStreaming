@@ -10,30 +10,38 @@ import time
 global conn
 global cursor
 
+# I created a class, as python doesn't have nice constructs, so a class was used instead
 class Customer:
     CustomerID : int = -1
     Username : str
     Email : str
     SignedUp : bool
 
+#The makes the Title up the top of every window
 def Title(pageTitle : str):
-    os.system("cls")
-    print("\033[37m" + pageTitle + "\033[0m")
-    print("-" * 100)
+    os.system("cls") #clears the screen
+    print("\033[37;1m" + pageTitle + "\033[0;0;0m") #adds the page title in white
+    print("-" * 100) # adds in 100 hyphens
 
+#Creates the Custom Error Message
 def ErrorDisplay(errorMessage):
+    #prints the error message in red
     print("\033[1;31mError: ")
     print(errorMessage)
     print("\033[37mPress any key to quit the program\033[0m")
-    os.system("pause > nul")
-    sys.exit()
+    os.system("pause > nul") # wait until the user clicks a key
+    closeProgram()
 
+#Setup to close the program correctly, and save everything first
 def closeProgram():
+    #save
     conn.commit()
+    #and quit
     cursor.close()
     conn.close()
     sys.exit()
 
+#Gets whether the user wants to sort their table ascending or descending
 def AscendingOrDescending(title: str):
     while True:
         Title(title)
@@ -51,13 +59,16 @@ def AscendingOrDescending(title: str):
                 print("Press any key to try again")
                 os.system("pause > nul")
 
+# a function that handels the frontend logging in of the users
 def LogIn():
     while True:
         Title("Login")
         print("Welcome")
         print("Please login")
         username = input("Username: ")
+        #hashes the password
         password = sha256(input("Password: ").encode('utf-8')).hexdigest()
+        #checks for correct username and password
         cursor.execute('''
             SELECT CustomerID FROM Customer
             WHERE Username = ? AND Password = ?
@@ -70,18 +81,23 @@ def LogIn():
         else:
             return answer[0][0]
 
+#uses the customer id to get all of the details stored on the customer within the database
 def GetCustomerDetails():
+    #check the user has actually logged in first
     if (customer.CustomerID < 0 or type(customer.CustomerID) is not int):
         ErrorDisplay("The Customer has not logged in yet, and so their customer details cannot be found")
+    #grab the data
     cursor.execute('''
         SELECT Username, Email, SignedUp FROM Customer
         WHERE CustomerID = ?
     ''', [customer.CustomerID])
     answer = cursor.fetchall()
+    #save the data
     customer.Username = answer[0][0]
     customer.Email = answer[0][1]
     customer.SignedUp = bool(int(answer[0][2]))
 
+# a prestructed method to query the database, and then display that using pandas
 def DisplayQueries(query : str):
     columnData = cursor.execute(query)
     columns = [column[0] for column in columnData.description] #get all the coloumn names
@@ -108,9 +124,10 @@ def DisplayQueries(query : str):
     print("\n\033[1mPress \'Enter\' to close the table\033[0m")
     input()
     
+#Function detailing the user frontend interaction for deciding how to sort the table
 def BrowseSongs():
     sortTerm = ""
-    #get how the user wants their songs sorted
+    #Get how the user wants their songs sorted
     while True:
         Title("Songs")
         print("What would you like to sort the songs based on: ")
@@ -151,6 +168,7 @@ def BrowseSongs():
     #Sorted Ascending or Descending
     AscOrDesc = AscendingOrDescending("Songs")
     
+    #Creates the query and executes it
     Title("Songs")
     query = '''
                 SELECT Song.Name AS Title, GROUP_CONCAT(DISTINCT Artist.StageName) AS Artist, 
@@ -169,6 +187,7 @@ def BrowseSongs():
 
     DisplayQueries(query)
 
+#Handels the frontend interaction of the user deciding how to sort the table
 def BrowseArtists():
     sortTerm = ""
     #get how the user wants their artists sorted
@@ -207,6 +226,7 @@ def BrowseArtists():
     #Sorted Ascending or Descending
     AscOrDesc = AscendingOrDescending("Artists")
     
+    #Creates the query and executes it
     Title("Artists")
     query = '''
                 SELECT Artist.StageName AS "Stage Name", Artist.FirstName || ' ' || Artist.LastName AS "Actual Name",
@@ -227,6 +247,7 @@ def BrowseArtists():
 
     DisplayQueries(query)
 
+#Handels the frontend interaction of the user deciding how to sort the table
 def BrowseAlbums():
     sortTerm = ""
     #get how the user wants their Albums sorted
@@ -265,7 +286,7 @@ def BrowseAlbums():
     #Sorted Ascending or Descending
     AscOrDesc = AscendingOrDescending("LPs/Albums")
         
-    
+    #Creates the query and executes it
     Title("LPs/Albums")
     query = '''
                 SELECT Album.Name AS Album, COUNT(DISTINCT Song.SongID) AS "Number of Songs",
@@ -284,6 +305,7 @@ def BrowseAlbums():
 
     DisplayQueries(query)
 
+#Handels the frontend interaction of the user deciding how to sort the table
 def BrowseGenres():
     sortTerm = ""
     #get how the user wants their Albums sorted
@@ -322,6 +344,7 @@ def BrowseGenres():
     #Sorted Ascending or Descending
     AscOrDesc = AscendingOrDescending("Genres")
     
+    #Creates the query and executes it
     Title("Genres")
     query = '''
                 SELECT Genre.Name AS Genre, COUNT(DISTINCT Song.SongID) AS "Song Count",
@@ -340,6 +363,7 @@ def BrowseGenres():
 
     DisplayQueries(query)
 
+#Handels the frontend interaction of the user which table to look at
 def Browse():
     while True:
         Title("Browse")
@@ -361,6 +385,7 @@ def Browse():
                 print("Press any key to try again")
                 os.system("pause > nul")
 
+#Handels the viewing, and editing of the user table for the frontend
 def UserData(customer : Customer):
     while True:
         while True:
@@ -375,6 +400,7 @@ def UserData(customer : Customer):
             print("(D)elete Account")
             print("(B)ack to Account Data")
             inp = input().lower().strip()
+            #What do they want to do
             match inp:
                 case "e": break
                 case "d":
@@ -399,6 +425,7 @@ def UserData(customer : Customer):
                     print("Press any key to try again")
                     os.system("pause > nul")
         
+        #Edit the username
         while True:
             Title("User Data")
             print("Edit\n")
@@ -424,7 +451,7 @@ def UserData(customer : Customer):
                 print("Press any key to try again")
                 os.system("pause > null")
             
-        
+        #Editing the Email
         while True:
             Title("User Data")
             print("Edit\n")
@@ -475,6 +502,7 @@ def UserData(customer : Customer):
                 os.system("pause > nul")
                 continue
             while True:
+                #check they input the same password twice
                 newPassword = input("What do you want to change it to: ")
                 secondInput = input("Input the password a second time: ")
                 if (newPassword != secondInput):
@@ -487,6 +515,7 @@ def UserData(customer : Customer):
                     print("Press any key to try again")
                     os.system("pause > nul")
                     continue
+                #hash it, and save the hash
                 hashedPassword = sha256(newPassword.encode('utf-8')).hexdigest()
                 cursor.execute("UPDATE Customer SET Password = ? WHERE CustomerID = ?", [hashedPassword, customer.CustomerID])
                 break
@@ -495,6 +524,7 @@ def UserData(customer : Customer):
         conn.commit()
         GetCustomerDetails()
 
+#Handels the viewing, and editing of the banking table for the frontend
 def BankingData(customer : Customer):
     while True:
         Title("Banking Data")
@@ -516,6 +546,7 @@ def BankingData(customer : Customer):
             print("(D)elete Data")
             print("(B)ack to Account Data")
             inp = input().lower().strip()
+            #what do they want to do
             match inp:
                 case "d":
                     #just set the foreign key to go to a new BankDetails record, so no delete anomolies occur
@@ -544,6 +575,7 @@ def BankingData(customer : Customer):
                 break
             break
     
+    #new bank card number
     bankingDetails = []
     while True:
         Title("Banking Data")
@@ -563,6 +595,7 @@ def BankingData(customer : Customer):
             os.system("pause > nul")
             continue
     
+    #New card, holder name
     while True:
         Title("Banking Data")
         print("New Bank Card")
@@ -585,6 +618,7 @@ def BankingData(customer : Customer):
         bankingDetails.append(inp)
         break
     
+    #expiration date of the new card
     while True:
         Title("Banking Data")
         print("New Bank Card")
@@ -617,6 +651,7 @@ def BankingData(customer : Customer):
         bankingDetails.append(date)
         break
     
+    #The CVV of the new bank card
     while True:
         Title("Banking Data")
         print("New Bank Card")
@@ -646,6 +681,7 @@ def BankingData(customer : Customer):
     conn.commit()
     return
 
+#gets the invoice for the user
 def Invoices(customer : Customer):
     Title("Invoices")
     query = '''
@@ -661,6 +697,7 @@ def Invoices(customer : Customer):
         ORDER BY SubscriptionInvoice.SaleDate DESC'''
     DisplayQueries(query)
 
+#Delete the users listening history
 def DeleteListeningHistory(customer : Customer):
     Title("Deleting Listening History")
     query = "DELETE FROM RecentlyPlayedSongs WHERE CustomerID = " + str(customer.CustomerID)
@@ -677,7 +714,7 @@ def DeleteListeningHistory(customer : Customer):
     print("Press any key to go back to Account Data")
     os.system("pause > nul")
 
-
+#browse the types of account data
 def AccountData():
     while True:
         Title("Account Data")
@@ -699,6 +736,7 @@ def AccountData():
                     print("Press any key to try again")
                     os.system("pause > nul")
 
+#The main function, that contains the main menu of the frontend
 def main():
     global customer
     customer = Customer
@@ -724,6 +762,7 @@ def main():
                 print("Press any key to try again")
                 os.system("pause > nul")
 
+#If this is the main python file ran, then connect to the database, and run the main menu
 if (__name__ == "__main__"):
     os.system("title SoundShift")
     try:
